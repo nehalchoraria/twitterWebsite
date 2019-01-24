@@ -8,11 +8,10 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 
-@login_required
 def homePage(request):
     form = TweetForm(request.POST or None)
     if request.user.is_authenticated!=True:
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect("/login")
 
     print("Logged in user : ",request.user)
     if request.method == 'POST':
@@ -31,7 +30,15 @@ def homePage(request):
     # instance.follows.set(request.user)
 
     followingUser= Userprofile.objects.get_or_create(user_name=request.user)[0].follows.all()
-    newusersList = User.objects.all().difference(followingUser).order_by('-date_joined')
+    curentUser =  User.objects.get(username=request.user)
+    unfollowUserList = User.objects.all().difference(followingUser).order_by('-date_joined')
     tweetList = Post.objects.filter(author=request.user).order_by('-created_date')
-    context={'tweet':form,'tweetList':tweetList,'usersList':newusersList}
+
+    otherTweets = []
+    for user_ in followingUser:
+        otherTweets = Post.objects.filter(author=(user_))
+        tweetList = tweetList | otherTweets
+    tweetList = tweetList.order_by('-created_date')
+
+    context={'tweet':form,'tweetList':tweetList,'usersList':unfollowUserList,'username':request.user}
     return render(request,"home.html",context)

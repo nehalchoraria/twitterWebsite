@@ -9,7 +9,7 @@ def loginPage(request):
     form = LoginForm(request.POST or None)
     context={'form':form}
     if request.user.is_authenticated==True:
-        return HttpResponseRedirect("/home")
+        return HttpResponseRedirect("/")
 
     if form.is_valid():
         username=form.cleaned_data.get("username")
@@ -19,7 +19,7 @@ def loginPage(request):
         if user is not None:
             login(request,user)
             if request.user.is_authenticated==True:
-                return HttpResponseRedirect("/home")
+                return HttpResponseRedirect("/")
             else:
                 return render(request,"auth/login.html",context)
         else:
@@ -41,7 +41,6 @@ def registerPage(request):
         UserType.objects.create(author=user,type=account)
         form=RegisterForm()
         context['update']="User added succesfully."
-
     return render(request,"auth/register.html",context)
 
 def logoutPage(request):
