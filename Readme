@@ -1,0 +1,9 @@
+A twitter clone which runs on django backend. 
+Contains:
+  1. Login/Register functionality. 
+  2. Follower Following model
+  3. Dyanmic data based on account type.
+  4. Adding new tweets, commenting and like-dislike option
+  5. Getting feed from followed users
+  
+  The website is hosted live here : https://twitterweb.herokuapp.com/
