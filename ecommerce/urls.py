@@ -25,6 +25,7 @@ urlpatterns = [
     path('register/', registerPage),
     path('follow/', include('following.urls')),
     path('following/', include('following.urls')),
+    path('tweet/', include('tweet.urls')),
     path('', include('tweet.urls')),
     path('logout/', logoutPage),
 ]

@@ -25,14 +25,10 @@ def homePage(request):
             tweet.save()
             form = TweetForm()
 
-    # print(UserProfile)
-    # instance = Userprofile.objects.all();
-    # instance.follows.set(request.user)
-
     followingUser= Userprofile.objects.get_or_create(user_name=request.user)[0].follows.all()
     curentUser =  User.objects.get(username=request.user)
     unfollowUserList = User.objects.all().difference(followingUser).order_by('-date_joined')
-    tweetList = Post.objects.filter(author=request.user).order_by('-created_date')
+    tweetList = Post.objects.filter(author=request.user).filter(parent=None).order_by('-created_date')
 
     otherTweets = []
     for user_ in followingUser:
@@ -42,3 +38,32 @@ def homePage(request):
 
     context={'tweet':form,'tweetList':tweetList,'usersList':unfollowUserList,'username':request.user}
     return render(request,"home.html",context)
+
+@login_required
+def tweetdetails(request,id):
+    tweet = Post.objects.filter(id=(id))
+
+    if tweet.exists() == False:
+        print('in')
+        return HttpResponseRedirect("/")
+
+    child= Post.objects.filter(parent=(id))
+    form = TweetForm(request.POST or None)
+    if request.method == 'POST':
+        print(request)
+        if form.is_valid():
+            tweettitle=form.cleaned_data.get("title")
+            tweettext=form.cleaned_data.get("text")
+            tweet1=form.save(commit=False)
+            tweet1.title = form.cleaned_data.get("title")
+            tweet1.text = form.cleaned_data.get("text")
+            tweet1.author = request.user
+            tweet1.author = request.user
+            tweet1.parent = id
+            tweet1.save()
+            form = TweetForm()
+    context={
+    'tweet':tweet, 'form':form,'child':child
+    }
+
+    return render(request,"tweet.html",context)

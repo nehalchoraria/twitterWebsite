@@ -16,4 +16,5 @@ class TweetForm(ModelForm):
             'placeholder': 'Tweet header'})
         self.fields['text'].widget = forms.Textarea(attrs={
             'class': 'form-control',
+            'rows':7,
             'placeholder': 'Enter tweet'})

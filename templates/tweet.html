@@ -28,9 +28,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
               <a class="nav-link" href="/">Home
-                <span class="sr-only">(current)</span>
               </a>
             </li>
             <li class="nav-item">
@@ -55,9 +54,7 @@
 
           <h1 class="my-4">New Users</h1>
           <div class="list-group">
-            {% for cell in usersList %}
-            <a href="following/following/{{cell}}" class="list-group-item"> Follow : @{{cell}} </a>
-            {% endfor %}
+
           </div>
 
         </div>
@@ -65,42 +62,52 @@
         <div class="col-lg-9">
           <div class="carousel slide my-4" data-ride="carousel">
           </div>
+            {% for cell in tweet %}
 
-          <form method="POST">
-            {% csrf_token %}
-            {{tweet.title}}
-            {{tweet.text}}
-            <br>
-            <button style="margin:auto;display:block" type="submit" class="btn btn-primary mb-2">Submit</button>
-          </form>
-
-          <hr><br>
-          <div class="row">
-
-            {% for cell in tweetList %}
-
-            <div class="col-lg-4 col-md-6 mb-4">
-
+            <div class="col-lg-12 col-md-6 ">
               <div class="card h-100">
-                <a href="/tweet/{{ cell.id }}" style="text-decoration:none">
+                <div class="card-body">
+                  <h5  class="card-title">
+                    {{ cell.title }}
+                  </h5>
+                  <p class="card-text">{{ cell.text }}</p>
+                </div>
+                <div class="card-footer">
+                  <small class="text-muted">Like Dislike @{{ cell.author }} </small>
+                </div>
+              </div>
+            </div>
+
+            {% endfor %}
+
+            {% for cell in child %}
+            <div class="col-lg-10 col-md-6" style="left-padding:50%">
+              <div class="card h-100">
                 <div class="card-body">
                   <h4 class="card-title">
                     {{ cell.title }}
                   </h4>
                   <p class="card-text">{{ cell.text }}</p>
                 </div>
-                </a>
                 <div class="card-footer">
-                  <small class="text-muted">@{{ cell.author }} </small>
-                  <small align="right" class="text-muted">@{{ cell.author }} </small>
+                  <small class="text-muted">Like Dislike @{{ cell.author }} </small>
                 </div>
               </div>
-
             </div>
-
             {% endfor %}
-
+            <br>
+            <div class="col-lg-10 col-md-6 mb-4" style="left-padding:50%">
+            <form method="POST">
+              {% csrf_token %}
+              {{form.title}}
+              {{form.text}}
+              <br>
+              <button style="margin:auto;display:block" type="submit" class="btn btn-primary mb-2">Submit</button>
+            </form>
           </div>
+
+
+
           <!-- /.row -->
 
         </div>
